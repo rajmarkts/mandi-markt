@@ -48,7 +48,7 @@ export const authHelpers = {
     const authData = await pb
       .collection(COLLECTIONS.USERS)
       .authWithPassword(email, password);
-    return authData.record as User;
+    return authData.record as unknown as User;
   },
 
   async logout(): Promise<void> {
@@ -459,14 +459,14 @@ export const khataEntryApi = {
 export const realtimeApi = {
   subscribeOrders(callback: (data: Order) => void): () => void {
     pb.collection(COLLECTIONS.ORDERS).subscribe('*', (e) => {
-      callback(e.record as Order);
+      callback(e.record as unknown as Order);
     });
     return () => pb.collection(COLLECTIONS.ORDERS).unsubscribe('*');
   },
 
   subscribeKhata(callback: (data: Khata) => void): () => void {
     pb.collection(COLLECTIONS.KHATA).subscribe('*', (e) => {
-      callback(e.record as Khata);
+      callback(e.record as unknown as Khata);
     });
     return () => pb.collection(COLLECTIONS.KHATA).unsubscribe('*');
   },
