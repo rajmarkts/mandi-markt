@@ -82,7 +82,7 @@ export function ProductForm({
 
     const productData: Partial<Product> = {
       ...formData,
-      image: imageFile || formData.image,
+      image: imagePreview || undefined,
     };
 
     onSubmit(productData, variants);

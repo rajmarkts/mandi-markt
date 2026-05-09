@@ -5,7 +5,7 @@ import { MoreVertical, Edit2, Trash2, Package, Tag, Store } from "lucide-react";
 import { Button } from "./Button";
 import { Card } from "./Card";
 import { formatCurrency } from "@/lib/utils";
-import type { ProductVariant, ProductWithVariants } from "@/lib/types";
+import type { ProductWithVariants, ProductVariant } from "@/lib/types";
 
 interface ProductCardProps {
   product: ProductWithVariants;
