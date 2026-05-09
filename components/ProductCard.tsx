@@ -5,12 +5,12 @@ import { MoreVertical, Edit2, Trash2, Package, Tag, Store } from "lucide-react";
 import { Button } from "./Button";
 import { Card } from "./Card";
 import { formatCurrency } from "@/lib/utils";
-import type { Product, ProductVariant } from "@/lib/types";
+import type { ProductVariant, ProductWithVariants } from "@/lib/types";
 
 interface ProductCardProps {
-  product: Product & { variants?: ProductVariant[] };
-  onEdit: (product: Product) => void;
-  onDelete: (product: Product) => void;
+  product: ProductWithVariants;
+  onEdit: (product: ProductWithVariants) => void;
+  onDelete: (product: ProductWithVariants) => void;
 }
 
 export function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
