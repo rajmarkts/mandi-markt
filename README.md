@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mandi Markt
+
+A rural B2B marketplace connecting wholesalers and retailers in low-internet connectivity areas.
+
+## Project Goals
+
+Mandi Markt is designed to bridge the gap between agricultural wholesalers and rural retailers who face challenges with:
+- Limited or unreliable internet connectivity
+- Complex inventory and order management
+- Lack of centralized pricing information
+- Difficulties in supply chain coordination
+
+### Key Features
+
+- **Offline-First Design**: Core functionality works with intermittent connectivity
+- **Wholesaler Portal**: Manage inventory, pricing, and bulk orders
+- **Retailer App**: Browse products, place orders, and track deliveries
+- **Simplified UI**: Easy-to-use interface designed for users with varying technical expertise
+- **Low-Bandwidth Optimized**: Minimal data usage for all transactions
+
+## Tech Stack
+
+- **Frontend**: Next.js 15 + React + TypeScript
+- **Styling**: Tailwind CSS
+- **Backend**: PocketBase
+- **Database**: SQLite (via PocketBase)
+
+## Project Structure
+
+```
+├── app/              # Next.js App Router
+├── components/       # Reusable UI components
+├── hooks/            # Custom React hooks
+├── lib/              # Utility functions and helpers
+├── backend/          # PocketBase backend
+│   ├── pocketbase.exe    # PocketBase executable (add manually)
+│   └── pb_schema.json    # Database schema
+└── public/           # Static assets
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20+
+- PocketBase executable (download from [pocketbase.io](https://pocketbase.io/))
+
+### Frontend Setup
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The frontend will be available at `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Backend Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Download PocketBase from https://pocketbase.io/
+2. Place the executable in the `/backend` folder
+3. Start PocketBase:
 
-## Learn More
+```bash
+cd backend
+./pocketbase serve
+```
 
-To learn more about Next.js, take a look at the following resources:
+The backend admin UI will be available at `http://localhost:8090/_`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Development
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Frontend runs on port 3000
+- PocketBase runs on port 8090
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT

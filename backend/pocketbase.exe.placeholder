@@ -1,0 +1,14 @@
+# PocketBase Executable Placeholder
+
+Download PocketBase from: https://github.com/pocketbase/pocketbase/releases
+
+Place the appropriate executable for your OS in this folder:
+- Windows: pocketbase.exe
+- macOS: pocketbase
+- Linux: pocketbase
+
+To start the server:
+  ./pocketbase serve
+
+Admin UI: http://localhost:8090/_/
+API Base: http://localhost:8090

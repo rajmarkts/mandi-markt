@@ -24,3 +24,71 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* ============================================
+   PRINT STYLES - Clean Black & White
+   ============================================ */
+
+@media print {
+  @page {
+    size: A4;
+    margin: 15mm;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide all UI elements not meant for print */
+  .print\:hidden,
+  nav, 
+  header,
+  footer,
+  .no-print,
+  button:not(.print-keep),
+  .floating-cart,
+  .bottom-sheet,
+  .modal-overlay {
+    display: none !important;
+  }
+
+  /* Show only print content */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Reset backgrounds for clean printing */
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Ensure text is black */
+  h1, h2, h3, h4, h5, h6,
+  p, span, div, td, th {
+    color: black !important;
+  }
+
+  /* Borders for tables */
+  table {
+    border-collapse: collapse;
+  }
+
+  th, td {
+    border: 1px solid #333 !important;
+  }
+
+  /* Page break utilities */
+  .page-break {
+    page-break-before: always;
+  }
+
+  .page-break-after {
+    page-break-after: always;
+  }
+
+  .no-page-break {
+    page-break-inside: avoid;
+  }
+}
