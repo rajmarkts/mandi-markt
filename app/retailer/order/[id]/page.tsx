@@ -280,7 +280,7 @@ export default function OrderConfirmationPage() {
                 Thank you for your business!
               </p>
               <p className="text-xs text-gray-400 print:text-gray-500 mt-1">
-                Mandi Markt - Fresh Produce B2B Marketplace
+                Kirana Mandi - Fresh Produce B2B Marketplace
               </p>
               <div className="mt-4 pt-4 border-t border-gray-200 print:border-gray-400">
                 <p className="text-xs text-gray-400 print:text-gray-500">_________________________</p>

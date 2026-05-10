@@ -13,7 +13,7 @@ const ADMIN_EMAIL = process.env.PB_ADMIN_EMAIL || 'admin@mandimarkt.com';
 const ADMIN_PASSWORD = process.env.PB_ADMIN_PASSWORD || 'admin123456';
 
 async function setupPocketBase() {
-  console.log('🚀 Setting up Mandi Markt PocketBase...\n');
+  console.log('🚀 Setting up Kirana Mandi PocketBase...\n');
 
   // Step 1: Check if schema file exists
   const schemaPath = path.join(__dirname, 'pb_schema.json');

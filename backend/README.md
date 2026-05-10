@@ -1,4 +1,4 @@
-# PocketBase Setup for Mandi Markt
+# PocketBase Setup for Kirana Mandi
 
 ## Quick Setup (3 minutes)
 

@@ -1,4 +1,4 @@
-// TypeScript Interfaces for Mandi Markt Database Schema
+// TypeScript Interfaces for Kirana Mandi Database Schema
 
 // ============================================
 // ENUMS

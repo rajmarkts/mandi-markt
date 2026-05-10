@@ -10,6 +10,9 @@
   package = "@netlify/plugin-nextjs"
 
 [context.production.environment]
+  # REPLACE WITH YOUR ACTUAL POCKETBASE URL
+  # Railway: https://pocketbase-xxxxx.up.railway.app
+  # Fly.io: https://mandi-pocketbase.fly.dev
   NEXT_PUBLIC_POCKETBASE_URL = "https://mandi-pocketbase.fly.dev"
 
 [context.deploy-preview.environment]

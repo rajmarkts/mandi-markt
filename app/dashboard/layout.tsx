@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Wholesaler Dashboard - Mandi Markt",
+  title: "Wholesaler Dashboard - Kirana Mandi",
   description: "Manage your inventory and products",
 };
 
@@ -16,7 +16,7 @@ export default function DashboardLayout({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <h1 className="text-xl font-bold tracking-tight">📦 Mandi Markt</h1>
+              <h1 className="text-xl font-bold tracking-tight">📦 Kirana Mandi</h1>
             </div>
             <nav className="flex items-center gap-2">
               <span className="text-sm opacity-90">Wholesaler</span>

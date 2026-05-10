@@ -209,7 +209,7 @@ export function PrintableBill({
         {/* Footer */}
         <div className="mt-8 pt-4 border-t border-gray-300 text-center text-xs text-gray-500 print:text-gray-700">
           <p>Thank you for your business!</p>
-          <p className="mt-1">Mandi Markt - Connecting Farmers & Retailers</p>
+          <p className="mt-1">Kirana Mandi - Connecting Farmers & Retailers</p>
           <p className="mt-2">_________________________</p>
           <p className="mt-1">Authorized Signature</p>
         </div>

@@ -3,6 +3,16 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* Kirana Mandi Brand Colors */
+  --navy: #1a365d;
+  --navy-dark: #0f2942;
+  --navy-light: #2c5282;
+  --emerald: #2f855a;
+  --emerald-dark: #276749;
+  --emerald-light: #38a169;
+  --cream: #fefce8;
+  --warm-gray: #f5f5f0;
 }
 
 @theme inline {
@@ -10,6 +20,16 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Brand Colors */
+  --color-navy: var(--navy);
+  --color-navy-dark: var(--navy-dark);
+  --color-navy-light: var(--navy-light);
+  --color-emerald: var(--emerald);
+  --color-emerald-dark: var(--emerald-dark);
+  --color-emerald-light: var(--emerald-light);
+  --color-cream: var(--cream);
+  --color-warm-gray: var(--warm-gray);
 }
 
 @media (prefers-color-scheme: dark) {

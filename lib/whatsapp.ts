@@ -28,7 +28,7 @@ export function generateWhatsAppMessage(order: OrderDetails): string {
   const totalItems = order.items.reduce((sum, item) => sum + item.quantity, 0);
   
   // Header
-  let message = `🛒 *NEW ORDER - Mandi Markt*\n`;
+  let message = `🛒 *NEW ORDER - Kirana Mandi*\n`;
   message += `━━━━━━━━━━━━━━━━━━━━\n\n`;
   
   // Order ID if available
@@ -75,7 +75,7 @@ export function generateWhatsAppMessage(order: OrderDetails): string {
   
   // Footer
   message += `\n━━━━━━━━━━━━━━━━━━━━\n`;
-  message += `📱 Sent via Mandi Markt\n`;
+  message += `📱 Sent via Kirana Mandi\n`;
   message += `✅ Please confirm availability`;
   
   return message;

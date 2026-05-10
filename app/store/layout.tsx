@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Mandi Markt - Order Fresh",
+  title: "Kirana Mandi - Order Fresh",
   description: "Order fresh produce directly from wholesalers",
 };
 
@@ -22,7 +22,7 @@ export default function StoreLayout({
                 <span className="text-xl">🌾</span>
               </div>
               <div>
-                <h1 className="text-lg font-bold tracking-tight leading-none">Mandi Markt</h1>
+                <h1 className="text-lg font-bold tracking-tight leading-none">Kirana Mandi</h1>
                 <p className="text-xs text-emerald-200/80">Fresh. Direct. Trusted.</p>
               </div>
             </div>

@@ -1,10 +1,10 @@
-# Mandi Markt
+# Kirana Mandi
 
 A rural B2B marketplace connecting wholesalers and retailers in low-internet connectivity areas.
 
 ## Project Goals
 
-Mandi Markt is designed to bridge the gap between agricultural wholesalers and rural retailers who face challenges with:
+Kirana Mandi is designed to bridge the gap between agricultural wholesalers and rural retailers who face challenges with:
 - Limited or unreliable internet connectivity
 - Complex inventory and order management
 - Lack of centralized pricing information
