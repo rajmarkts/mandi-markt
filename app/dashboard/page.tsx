@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Plus, Search, Filter, Package, Loader2 } from "lucide-react";
+import { useUser, useClerk } from "@clerk/nextjs";
+import { Plus, Search, Filter, Package, Loader2, LogOut, User } from "lucide-react";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { ProductCard } from "@/components/ProductCard";
@@ -45,12 +46,24 @@ const MOCK_PRODUCTS: ProductWithVariants[] = [
 ];
 
 export default function DashboardPage() {
+  const { user, isLoaded } = useUser();
+  const { signOut } = useClerk();
+  const userRole = user?.unsafeMetadata?.role as string | undefined;
+  
   const [view, setView] = useState<"list" | "add" | "edit">("list");
   const [products, setProducts] = useState<ProductWithVariants[]>(MOCK_PRODUCTS);
   const [searchQuery, setSearchQuery] = useState("");
   const [editingProduct, setEditingProduct] = useState<ProductWithVariants | null>(null);
   const [deletingProduct, setDeletingProduct] = useState<ProductWithVariants | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-navy" />
+      </div>
+    );
+  }
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) =>
@@ -177,10 +190,36 @@ export default function DashboardPage() {
   // List view
   return (
     <div className="space-y-4">
+      {/* User Profile Header */}
+      <div className="bg-white rounded-xl p-4 shadow-sm flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-navy rounded-full flex items-center justify-center text-white font-bold">
+            {user?.firstName?.[0] || user?.emailAddresses[0]?.emailAddress?.[0] || "U"}
+          </div>
+          <div>
+            <p className="font-semibold text-gray-900">
+              {user?.firstName || user?.emailAddresses[0]?.emailAddress?.split("@")[0] || "User"}
+            </p>
+            <p className="text-xs text-emerald-600 font-medium uppercase tracking-wide">
+              {userRole || "Wholesaler"}
+            </p>
+          </div>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => signOut({ redirectUrl: "/" })}
+          className="text-gray-500 hover:text-red-600"
+        >
+          <LogOut className="w-4 h-4 mr-2" />
+          Sign Out
+        </Button>
+      </div>
+
       {/* Stats Summary */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        <div className="bg-emerald-600 text-white rounded-xl p-4">
-          <p className="text-emerald-100 text-sm">Total Products</p>
+        <div className="bg-navy text-white rounded-xl p-4">
+          <p className="text-blue-200 text-sm">Total Products</p>
           <p className="text-3xl font-bold">{products.length}</p>
         </div>
         <div className="bg-white rounded-xl p-4 shadow-sm">
