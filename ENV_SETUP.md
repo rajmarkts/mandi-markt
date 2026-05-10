@@ -17,6 +17,9 @@ NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/onboarding
 
 # Your existing PocketBase URL
 NEXT_PUBLIC_POCKETBASE_URL=https://your-pocketbase-url.com
+
+# Convex Backend URL (for real-time data)
+NEXT_PUBLIC_CONVEX_URL=https://your-deployment.convex.cloud
 ```
 
 ## How to Get Clerk Keys
@@ -120,3 +123,60 @@ Check your `.env.local` file has all required keys
 
 ### "Redirect loop"
 Ensure user metadata is being set correctly in `/onboarding`
+
+---
+
+# Convex Backend Setup
+
+## How to Get Convex URL
+
+1. Go to https://convex.dev and create an account
+2. Create a new project called "kirana-mandi"
+3. Run `npx convex dev` in your project to initialize
+4. Copy the deployment URL from dashboard
+5. Add to `.env.local`:
+```env
+NEXT_PUBLIC_CONVEX_URL=https://your-deployment.convex.cloud
+```
+
+## Convex Schema Deploy
+
+After setup, deploy the schema:
+```bash
+npx convex push
+```
+
+## Sync Clerk Users to Convex
+
+The onboarding page automatically syncs users to Convex using the `users.syncClerkUser` mutation.
+
+Users are stored with:
+- `clerkId` - Reference to Clerk auth
+- `role` - wholesaler/retailer
+- `district` - Local Mandi location
+- `shopName`, `phone` - Business details
+
+## Key Queries
+
+### For Retailers (See Local Mandi Prices):
+```typescript
+const products = await ctx.runQuery(api.products.getByDistrict, {
+  district: "Lucknow",  // User's district
+  category: "vegetables",
+});
+```
+
+### For Wholesalers (Manage Inventory):
+```typescript
+const myProducts = await ctx.runQuery(api.products.getByWholesaler, {
+  wholesalerId: user._id,
+});
+```
+
+### Track Price History:
+```typescript
+const history = await ctx.runQuery(api.priceHistory.getByProduct, {
+  productId,
+  limit: 30,
+});
+```

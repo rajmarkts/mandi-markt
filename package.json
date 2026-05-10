@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^4.13.23",
     "clsx": "^2.1.1",
+    "convex": "^1.38.0",
     "lucide-react": "^1.14.0",
     "next": "16.2.5",
     "pocketbase": "^0.26.8",
