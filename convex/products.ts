@@ -192,11 +192,12 @@ export const getByDistrict = query({
       .withIndex("by_district", (q) => q.eq("district", args.district));
     
     // Filter by category if provided
-    if (args.category) {
+    const category = args.category;
+    if (category) {
       query = ctx.db
         .query("products")
         .withIndex("by_district_and_category", (q) => 
-          q.eq("district", args.district).eq("category", args.category)
+          q.eq("district", args.district).eq("category", category)
         );
     }
     
@@ -226,8 +227,8 @@ export const searchInDistrict = query({
         q.and(
           q.eq(q.field("isActive"), true),
           q.or(
-            q.contains(q.field("name"), args.searchQuery),
-            q.contains(q.field("category"), args.searchQuery)
+            q.eq(q.field("name"), args.searchQuery),
+            q.eq(q.field("category"), args.searchQuery)
           )
         )
       )
