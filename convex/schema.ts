@@ -113,6 +113,7 @@ export default defineSchema({
     priceChangePercent: v.optional(v.number()),
     timestamp: v.number(),
   })
+    .index("by_district", ["district"])
     .index("by_district_and_category", ["district", "category"])
     .index("by_date", ["date"])
     .index("by_district_category_date", ["district", "category", "date"]),
