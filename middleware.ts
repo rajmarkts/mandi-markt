@@ -1,5 +1,4 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
 
 // Define public routes that don't require authentication
 const isPublicRoute = createRouteMatcher([
@@ -7,59 +6,36 @@ const isPublicRoute = createRouteMatcher([
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/api/webhook(.*)",
+  "/api/convex(.*)",
+  "/api/clerk(.*)",
 ]);
 
-// Check if user has completed onboarding (has role metadata)
-const hasCompletedOnboarding = (auth: { sessionClaims?: { metadata?: { role?: string } } }) => {
-  return auth?.sessionClaims?.metadata?.role === "wholesaler" || 
-         auth?.sessionClaims?.metadata?.role === "retailer";
-};
-
 export default clerkMiddleware(async (auth, req) => {
-  const { userId, redirectToSignIn, sessionClaims } = await auth();
-  
-  // Allow public routes
-  if (isPublicRoute(req)) {
-    return NextResponse.next();
-  }
+  if (isPublicRoute(req)) return;
 
-  // If user is not logged in, redirect to sign-in
+  const { userId, redirectToSignIn, sessionClaims } = await auth();
+
   if (!userId) {
     return redirectToSignIn({ returnBackUrl: req.url });
   }
 
-  // Check if user needs onboarding (no role set)
-  // Type assertion for custom metadata
   const metadata = sessionClaims?.metadata as { role?: string } | undefined;
   const userRole = metadata?.role;
-  
-  // If no role is set and not already on onboarding page, redirect to onboarding
+
   if (!userRole && !req.nextUrl.pathname.startsWith("/onboarding")) {
     const onboardingUrl = new URL("/onboarding", req.url);
-    return NextResponse.redirect(onboardingUrl);
+    return new Response(null, { status: 307, headers: { Location: onboardingUrl.toString() } });
   }
 
-  // Role-based route protection
   if (userRole === "retailer" && req.nextUrl.pathname.startsWith("/dashboard")) {
-    // Retailers can't access wholesaler dashboard
     const retailerUrl = new URL("/retailer", req.url);
-    return NextResponse.redirect(retailerUrl);
+    return new Response(null, { status: 307, headers: { Location: retailerUrl.toString() } });
   }
-
-  if (userRole === "wholesaler" && req.nextUrl.pathname.startsWith("/retailer")) {
-    // Wholesalers can access retailer view for testing, or redirect to dashboard
-    // For now, we'll allow both but the UI will adapt
-    return NextResponse.next();
-  }
-
-  return NextResponse.next();
 });
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    // Always run for API routes
-    "/(api|trpc)(.*)",
+    // Skip Next.js internals and static files
+    "/((?!_next/static|_next/image|favicon.ico).*)",
   ],
 };

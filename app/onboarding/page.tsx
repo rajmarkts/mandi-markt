@@ -3,27 +3,43 @@
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Store, Package, ArrowRight, ShieldCheck } from "lucide-react";
+import { Store, Package, ArrowRight, ShieldCheck, AlertCircle } from "lucide-react";
 import { Button } from "@/components/Button";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 export default function OnboardingPage() {
   const { user, isLoaded } = useUser();
   const router = useRouter();
   const [selectedRole, setSelectedRole] = useState<"wholesaler" | "retailer" | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
+  const syncUser = useMutation(api.users.syncClerkUser);
 
   const handleRoleSelect = async (role: "wholesaler" | "retailer") => {
     if (!user) return;
     
     setIsSubmitting(true);
+    setError(null);
     
     try {
-      // Update user metadata with role
+      // First, update Clerk metadata
       await user.update({
         unsafeMetadata: {
           role: role,
           onboardingCompleted: true,
         },
+      });
+
+      // Then, sync user to Convex database
+      await syncUser({
+        clerkId: user.id,
+        role: role,
+        district: "Default", // Will be updated later in profile
+        phone: user.phoneNumbers[0]?.phoneNumber || "",
+        name: user.fullName || "",
+        email: user.emailAddresses[0]?.emailAddress || "",
       });
 
       // Redirect based on role
@@ -33,15 +49,33 @@ export default function OnboardingPage() {
         router.push("/retailer");
       }
     } catch (error) {
-      console.error("Failed to update role:", error);
+      console.error("Failed to complete onboarding:", error);
+      setError("Failed to complete onboarding. Please try again.");
       setIsSubmitting(false);
     }
   };
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-warm-gray">
-        <div className="animate-pulse text-navy text-lg font-medium">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-slate-900">
+        <div className="animate-pulse text-white text-lg font-medium">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-900">
+        <div className="text-center text-white">
+          <AlertCircle className="w-12 h-12 mx-auto mb-4 text-red-400" />
+          <p className="text-lg">Please sign in to continue</p>
+          <button 
+            onClick={() => router.push("/sign-in")}
+            className="mt-4 px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
+          >
+            Go to Sign In
+          </button>
+        </div>
       </div>
     );
   }
@@ -183,6 +217,16 @@ export default function OnboardingPage() {
             )}
           </ul>
         </div>
+
+        {/* Error Display */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-4 mb-8">
+            <div className="flex items-center gap-2 text-red-700">
+              <AlertCircle className="w-5 h-5" />
+              <span className="font-medium">{error}</span>
+            </div>
+          </div>
+        )}
 
         {/* Continue Button */}
         <Button
