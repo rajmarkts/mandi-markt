@@ -46,9 +46,9 @@ export const syncClerkUser = mutation({
   args: {
     clerkId: v.string(),
     role: v.union(v.literal("wholesaler"), v.literal("retailer")),
-    district: v.string(),
+    district: v.optional(v.string()),
     shopName: v.optional(v.string()),
-    phone: v.string(),
+    phone: v.optional(v.string()),
     name: v.optional(v.string()),
     email: v.optional(v.string()),
   },

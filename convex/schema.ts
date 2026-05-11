@@ -20,6 +20,12 @@ export default defineSchema({
     
     // User profile
     name: v.string(),
+    email: v.optional(v.string()),
+    phone: v.optional(v.string()),
+    
+    // Business info
+    shopName: v.optional(v.string()),
+    district: v.optional(v.string()),
     
     // Onboarding status - tracks who has finished setup
     onboarded: v.boolean(),
@@ -29,7 +35,9 @@ export default defineSchema({
     updatedAt: v.optional(v.number()),
   })
     .index("by_tokenIdentifier", ["tokenIdentifier"])
-    .index("by_clerkId", ["clerkId"]),
+    .index("by_clerkId", ["clerkId"])
+    .index("by_role", ["role"])
+    .index("by_district", ["district"]),
 
   // ============================================
   // PRODUCTS - With location-based pricing

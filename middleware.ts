@@ -13,11 +13,6 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  // Allow onboarding route for authenticated users without role check
-  if (req.nextUrl.pathname.startsWith("/onboarding")) {
-    return;
-  }
-
   if (isPublicRoute(req)) return;
 
   const { userId, redirectToSignIn, sessionClaims } = await auth();
@@ -29,18 +24,18 @@ export default clerkMiddleware(async (auth, req) => {
   const metadata = sessionClaims?.metadata as { role?: string } | undefined;
   const userRole = metadata?.role;
 
-  // Redirect users without role to onboarding
-  if (!userRole) {
-    const onboardingUrl = new URL("/onboarding", req.url);
-    return new Response(null, { status: 307, headers: { Location: onboardingUrl.toString() } });
-  }
-
-  // Redirect users with role away from onboarding (they never need to see it again)
+  // Redirect users WITH role away from onboarding (they never need to see it again)
   if (userRole && req.nextUrl.pathname.startsWith("/onboarding")) {
     const redirectUrl = userRole === "retailer" 
       ? new URL("/retailer", req.url) 
       : new URL("/dashboard", req.url);
     return new Response(null, { status: 307, headers: { Location: redirectUrl.toString() } });
+  }
+
+  // Redirect users WITHOUT role to onboarding (except if already on onboarding)
+  if (!userRole && !req.nextUrl.pathname.startsWith("/onboarding")) {
+    const onboardingUrl = new URL("/onboarding", req.url);
+    return new Response(null, { status: 307, headers: { Location: onboardingUrl.toString() } });
   }
 
   if (userRole === "retailer" && req.nextUrl.pathname.startsWith("/dashboard")) {
