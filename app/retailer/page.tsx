@@ -112,6 +112,12 @@ interface CartItem {
   quantity: number;
 }
 
+/**
+ * RetailerCatalogPage Component.
+ * Intent: To provide a high-efficiency discovery engine for retailers, 
+ * minimizing search friction and facilitating quick bulk purchases during 
+ * high-pressure market hours (e.g., 5:00 AM).
+ */
 export default function RetailerCatalogPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");

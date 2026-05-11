@@ -7,7 +7,9 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
 /**
- * Create a new product (Wholesaler only)
+ * Create a new product (Wholesaler only).
+ * Intent: To establish a wholesaler's digital storefront, 
+ * enabling them to broadcast their inventory to a wider local network.
  */
 export const create = mutation({
   args: {
@@ -55,8 +57,9 @@ export const create = mutation({
 });
 
 /**
- * Update product price with history tracking
- * Automatically creates priceHistory entry
+ * Update product price with history tracking.
+ * Intent: To mirror the volatile nature of Mandi price discovery while 
+ * building a transparent record that helps retailers predict market trends.
  */
 export const updatePrice = mutation({
   args: {
@@ -164,8 +167,9 @@ export const remove = mutation({
  */
 
 /**
- * Get products by district - KEY QUERY for local Mandi
- * Retailers see only products from their local district
+ * Get products by district - KEY QUERY for local Mandi.
+ * Intent: To reinforce community-based trade by ensuring retailers 
+ * discover products from wholesalers within their own geographic and social circle.
  */
 export const getByDistrict = query({
   args: {

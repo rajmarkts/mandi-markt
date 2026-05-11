@@ -7,7 +7,9 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
 /**
- * Create a new order (Retailer places order)
+ * Create a new order (Retailer places order).
+ * Intent: To formalize the commitment between a retailer and wholesaler, 
+ * starting the logistics chain while supporting traditional payment modes like Khata.
  */
 export const create = mutation({
   args: {
@@ -60,7 +62,9 @@ export const create = mutation({
 });
 
 /**
- * Update order status (Wholesaler updates)
+ * Update order status (Wholesaler updates).
+ * Intent: To provide real-time visibility into the order lifecycle, 
+ * reducing "Wait Anxiety" for retailers in the fast-paced Mandi environment.
  */
 export const updateStatus = mutation({
   args: {
@@ -85,7 +89,9 @@ export const updateStatus = mutation({
 });
 
 /**
- * Record payment on order
+ * Record payment on order.
+ * Intent: To maintain accurate financial records and build transparency, 
+ * ensuring both parties are aligned on remaining credit (Udhaar).
  */
 export const recordPayment = mutation({
   args: {
@@ -125,7 +131,9 @@ export const recordPayment = mutation({
 });
 
 /**
- * Cancel order
+ * Cancel order.
+ * Intent: To provide a safety net for errors or supply changes, 
+ * maintaining the flexibility required in volatile market conditions.
  */
 export const cancel = mutation({
   args: {
@@ -148,7 +156,9 @@ export const cancel = mutation({
  */
 
 /**
- * Get orders for retailer
+ * Get orders for retailer.
+ * Intent: To empower retailers with their purchase history, 
+ * helping them track inventory trends and manage their business more effectively.
  */
 export const getByRetailer = query({
   args: {
@@ -181,7 +191,9 @@ export const getByRetailer = query({
 });
 
 /**
- * Get orders for wholesaler
+ * Get orders for wholesaler.
+ * Intent: To provide wholesalers with a clear fulfillment pipeline, 
+ * allowing them to prioritize high-demand products and manage daily distribution.
  */
 export const getByWholesaler = query({
   args: {
@@ -244,7 +256,9 @@ export const getPendingCount = query({
 });
 
 /**
- * Get Khata (credit) orders - unpaid or partially paid
+ * Get Khata (credit) orders - unpaid or partially paid.
+ * Intent: To digitize the traditional 'Udhaar' (credit) system, 
+ * fostering long-term trust and financial accountability in the informal economy.
  */
 export const getKhataOrders = query({
   args: {

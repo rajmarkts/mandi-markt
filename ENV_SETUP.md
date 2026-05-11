@@ -180,3 +180,70 @@ const history = await ctx.runQuery(api.priceHistory.getByProduct, {
   limit: 30,
 });
 ```
+
+---
+
+# Vercel Deployment Setup
+
+## Required Environment Variables
+
+Add these environment variables in your Vercel project settings:
+
+### Clerk Authentication (Required)
+```
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/onboarding
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/onboarding
+```
+
+### Convex Backend (Required)
+```
+NEXT_PUBLIC_CONVEX_URL=https://your-deployment.convex.cloud
+```
+
+### PocketBase (Optional - if using)
+```
+NEXT_PUBLIC_POCKETBASE_URL=https://your-pocketbase-url.com
+```
+
+### Build Settings (Required)
+```
+NEXT_TELEMETRY_DISABLED=1
+```
+
+## Vercel Build Configuration
+
+Create `vercel.json` in project root:
+```json
+{
+  "buildCommand": "npm run build",
+  "framework": "nextjs",
+  "installCommand": "npm install"
+}
+```
+
+## PWA Features Enabled
+
+✅ Service Worker for offline support  
+✅ Web App Manifest for "Add to Home Screen"  
+✅ Stale-While-Revalidate caching  
+✅ Apple Touch Icons & Meta Tags  
+✅ Theme Color & Status Bar styling  
+
+## Performance Optimizations
+
+- **Images**: Using `next/image` with WebP/AVIF formats
+- **Caching**: SWR (Stale-While-Revalidate) for instant loads
+- **Offline**: Service Worker caches assets for offline use
+- **Bundle**: Optimized with Turbopack
+
+## Deployment Checklist
+
+- [ ] Add all environment variables to Vercel
+- [ ] Deploy Convex schema: `npx convex push`
+- [ ] Configure Clerk webhook URL
+- [ ] Test PWA on mobile device
+- [ ] Verify offline functionality

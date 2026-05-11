@@ -29,7 +29,9 @@ export default clerkMiddleware(async (auth, req) => {
   }
 
   // Check if user needs onboarding (no role set)
-  const userRole = sessionClaims?.metadata?.role;
+  // Type assertion for custom metadata
+  const metadata = sessionClaims?.metadata as { role?: string } | undefined;
+  const userRole = metadata?.role;
   
   // If no role is set and not already on onboarding page, redirect to onboarding
   if (!userRole && !req.nextUrl.pathname.startsWith("/onboarding")) {

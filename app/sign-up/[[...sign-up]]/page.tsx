@@ -45,7 +45,7 @@ export default function SignUpPage() {
           }}
           routing="path"
           path="/sign-up"
-          redirectUrl="/onboarding"
+          fallbackRedirectUrl="/onboarding"
           signInUrl="/sign-in"
         />
 

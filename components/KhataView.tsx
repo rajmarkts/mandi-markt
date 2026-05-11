@@ -38,6 +38,12 @@ interface KhataViewProps {
   onViewOrder?: (orderId: string) => void;
 }
 
+/**
+ * KhataView Component.
+ * Intent: To digitize the traditional 'Bahi Khata' (ledger) system, 
+ * providing a clear, trust-based interface for managing 'Udhaar' (credit) 
+ * that balances the power dynamics between wholesalers and retailers.
+ */
 export function KhataView({ data, onPayNow, onViewOrder }: KhataViewProps) {
   const [filter, setFilter] = useState<"all" | "pending" | "paid">("all");
 

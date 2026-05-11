@@ -12,7 +12,9 @@ export type UserRole = "wholesaler" | "retailer" | null;
  */
 export async function getUserRole(): Promise<UserRole> {
   const { sessionClaims } = await auth();
-  return sessionClaims?.metadata?.role as UserRole || null;
+  // Type assertion needed for custom metadata
+  const metadata = sessionClaims?.metadata as { role?: UserRole } | undefined;
+  return metadata?.role || null;
 }
 
 /**

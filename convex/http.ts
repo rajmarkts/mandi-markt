@@ -1,16 +1,20 @@
 /**
- * Convex HTTP Actions
+ * Convex HTTP Router
  * Webhook handlers for external services
  */
 
-import { httpAction } from "./_generated/server";
-import { v } from "convex/values";
+import { httpRouter } from "convex/server";
+
+const http = httpRouter();
 
 /**
  * Webhook handler for Clerk user events
  * Syncs Clerk user data to Convex
  */
-export const clerkWebhook = httpAction(async (ctx, request) => {
+http.route({
+  path: "/clerk-webhook",
+  method: "POST",
+  handler: async (ctx, request) => {
   // Verify webhook signature (in production, verify with Clerk secret)
   const payload = await request.json();
   
@@ -85,4 +89,8 @@ export const clerkWebhook = httpAction(async (ctx, request) => {
       headers: { "Content-Type": "application/json" },
     });
   }
+},
 });
+
+// Export the router as default
+export default http;
