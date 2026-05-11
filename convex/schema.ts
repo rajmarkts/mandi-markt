@@ -12,30 +12,18 @@ export default defineSchema({
   // ============================================
   users: defineTable({
     // Clerk authentication reference
-    clerkId: v.string(),
+    tokenIdentifier: v.string(),
     
     // User role: wholesaler or retailer
-    role: v.union(v.literal("wholesaler"), v.literal("retailer")),
-    
-    // Location for local mandi pricing
-    district: v.string(),
-    
-    // Business info
-    shopName: v.optional(v.string()),
-    phone: v.string(),
+    role: v.optional(v.union(v.literal("wholesaler"), v.literal("retailer"))),
     
     // User profile
-    name: v.optional(v.string()),
-    email: v.optional(v.string()),
+    name: v.string(),
     
-    // Timestamps
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    // Onboarding status - tracks who has finished setup
+    onboarded: v.boolean(),
   })
-    .index("by_clerkId", ["clerkId"])
-    .index("by_role", ["role"])
-    .index("by_district", ["district"])
-    .index("by_district_and_role", ["district", "role"]),
+    .index("by_tokenIdentifier", ["tokenIdentifier"]),
 
   // ============================================
   // PRODUCTS - With location-based pricing
