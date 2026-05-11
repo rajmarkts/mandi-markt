@@ -5,6 +5,7 @@ const isPublicRoute = createRouteMatcher([
   "/",
   "/sign-in(.*)",
   "/sign-up(.*)",
+  "/onboarding",
   "/api/webhook(.*)",
   "/api/webhooks(.*)",
   "/api/convex(.*)",
@@ -12,6 +13,11 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
+  // Allow onboarding route for authenticated users without role check
+  if (req.nextUrl.pathname.startsWith("/onboarding")) {
+    return;
+  }
+
   if (isPublicRoute(req)) return;
 
   const { userId, redirectToSignIn, sessionClaims } = await auth();
@@ -24,7 +30,7 @@ export default clerkMiddleware(async (auth, req) => {
   const userRole = metadata?.role;
 
   // Redirect users without role to onboarding
-  if (!userRole && !req.nextUrl.pathname.startsWith("/onboarding")) {
+  if (!userRole) {
     const onboardingUrl = new URL("/onboarding", req.url);
     return new Response(null, { status: 307, headers: { Location: onboardingUrl.toString() } });
   }

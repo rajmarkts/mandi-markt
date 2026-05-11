@@ -2,10 +2,10 @@
 
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Store, Package, ArrowRight, ShieldCheck, AlertCircle } from "lucide-react";
 import { Button } from "@/components/Button";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
 export default function OnboardingPage() {
@@ -14,8 +14,42 @@ export default function OnboardingPage() {
   const [selectedRole, setSelectedRole] = useState<"wholesaler" | "retailer" | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [userStored, setUserStored] = useState(false);
   
+  const storeUser = useMutation(api.users.storeUser);
   const syncUser = useMutation(api.users.syncClerkUser);
+  
+  // Get token identifier from user
+  const tokenIdentifier = user?.id ? `https://clerk.com|${user.id}` : null;
+  
+  // Check if user already exists in Convex
+  const existingUser = useQuery(
+    api.users.getByTokenIdentifier,
+    tokenIdentifier ? { tokenIdentifier } : "skip"
+  );
+  
+  // Store user immediately when loaded
+  useEffect(() => {
+    if (!isLoaded || !user || userStored) return;
+    
+    const store = async () => {
+      try {
+        const tokenId = `https://clerk.com|${user.id}`;
+        const result = await storeUser({
+          tokenIdentifier: tokenId,
+          name: user.fullName || user.firstName || "User",
+        });
+        if (result.success) {
+          setUserStored(true);
+        }
+      } catch (err) {
+        console.error("Failed to store user:", err);
+        setError("Failed to initialize. Please refresh the page.");
+      }
+    };
+    
+    store();
+  }, [isLoaded, user, storeUser, userStored]);
 
   const handleRoleSelect = async (role: "wholesaler" | "retailer") => {
     if (!user) return;
@@ -55,10 +89,19 @@ export default function OnboardingPage() {
     }
   };
 
-  if (!isLoaded) {
+  // Show friendly loading message while user data is loading or being stored
+  const isInitializing = !isLoaded || (user && !userStored && !existingUser);
+  
+  if (isInitializing) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-900">
-        <div className="animate-pulse text-white text-lg font-medium">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-cream to-white">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-navy rounded-2xl flex items-center justify-center mx-auto mb-6 animate-pulse">
+            <span className="text-3xl">🌾</span>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Setting up your shop...</h2>
+          <p className="text-gray-600">Just a moment while we prepare everything</p>
+        </div>
       </div>
     );
   }

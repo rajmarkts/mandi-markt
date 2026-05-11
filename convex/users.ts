@@ -7,6 +7,38 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
 /**
+ * Store user on first load - creates user without role
+ * Called immediately when user lands on onboarding page
+ */
+export const storeUser = mutation({
+  args: {
+    tokenIdentifier: v.string(),
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    // Check if user already exists
+    const existing = await ctx.db
+      .query("users")
+      .withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", args.tokenIdentifier))
+      .first();
+    
+    if (existing) {
+      return { success: true, userId: existing._id, action: "exists" };
+    }
+    
+    // Create new user without role, onboarded false
+    const userId = await ctx.db.insert("users", {
+      tokenIdentifier: args.tokenIdentifier,
+      name: args.name,
+      role: undefined,
+      onboarded: false,
+    });
+    
+    return { success: true, userId, action: "created" };
+  },
+});
+
+/**
  * Sync Clerk user to Convex after signup/onboarding
  * Called from frontend after Clerk authentication
  */
@@ -69,6 +101,21 @@ export const getByClerkId = query({
     const user = await ctx.db
       .query("users")
       .withIndex("by_clerkId", (q) => q.eq("clerkId", args.clerkId))
+      .first();
+    
+    return user;
+  },
+});
+
+/**
+ * Get user by token identifier (for onboarding checks)
+ */
+export const getByTokenIdentifier = query({
+  args: { tokenIdentifier: v.string() },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", args.tokenIdentifier))
       .first();
     
     return user;

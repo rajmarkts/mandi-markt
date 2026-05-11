@@ -15,13 +15,31 @@ http.route({
   path: "/clerk-webhook",
   method: "POST",
   handler: async (ctx, request) => {
-  // Verify webhook signature (in production, verify with Clerk secret)
-  const payload = await request.json();
+    let payload: { type?: string; data?: any } = {};
+    
+    // Safely parse request body
+    try {
+      payload = await request.json();
+    } catch (parseError) {
+      console.error("Failed to parse webhook payload:", parseError);
+      return new Response(JSON.stringify({ error: "Invalid JSON payload" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
   
-  const eventType = payload.type;
-  const userData = payload.data;
+    const eventType = payload.type;
+    const userData = payload.data;
   
-  try {
+    // Validate required fields
+    if (!eventType || !userData) {
+      return new Response(JSON.stringify({ error: "Missing required fields" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+  
+    try {
     switch (eventType) {
       case "user.created":
       case "user.updated": {
