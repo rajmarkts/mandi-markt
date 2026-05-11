@@ -5,6 +5,7 @@
 
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
+import { api } from "./_generated/api";
 
 const http = httpRouter();
 
@@ -44,14 +45,7 @@ http.route({
     switch (eventType) {
       case "user.created":
       case "user.updated": {
-        // Check if user exists in Convex
-        const existing = await ctx.runQuery(
-          ctx.db
-            .query("users")
-            .withIndex("by_clerkId", (q) => q.eq("clerkId", userData.id))
-            .first()
-        );
-        
+        // Import the internal functions to call via runQuery/runMutation
         const userInfo = {
           clerkId: userData.id,
           role: userData.unsafe_metadata?.role || "retailer",
@@ -62,24 +56,16 @@ http.route({
           email: userData.email_addresses?.[0]?.email_address,
         };
         
-        if (existing) {
-          // Update
-          await ctx.runMutation(
-            ctx.db.patch(existing._id, {
-              ...userInfo,
-              updatedAt: Date.now(),
-            })
-          );
-        } else {
-          // Create
-          await ctx.runMutation(
-            ctx.db.insert("users", {
-              ...userInfo,
-              createdAt: Date.now(),
-              updatedAt: Date.now(),
-            })
-          );
-        }
+        // Call the syncClerkUser mutation to handle the database operations
+        await ctx.runMutation(api.users.syncClerkUser, {
+          clerkId: userData.id,
+          role: userInfo.role as "wholesaler" | "retailer",
+          district: userInfo.district,
+          shopName: userInfo.shopName,
+          phone: userInfo.phone,
+          name: userInfo.name,
+          email: userInfo.email,
+        });
         
         return new Response(JSON.stringify({ success: true }), {
           status: 200,
