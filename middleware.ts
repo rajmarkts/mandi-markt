@@ -1,6 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-// Define public routes that don't require authentication
 const isPublicRoute = createRouteMatcher([
   "/",
   "/sign-in(.*)",
@@ -24,7 +23,7 @@ export default clerkMiddleware(async (auth, req) => {
   const metadata = sessionClaims?.metadata as { role?: string } | undefined;
   const userRole = metadata?.role;
 
-  // Redirect users WITH role away from onboarding (they never need to see it again)
+  // Redirect users WITH role away from onboarding
   if (userRole && req.nextUrl.pathname.startsWith("/onboarding")) {
     const redirectUrl = userRole === "retailer" 
       ? new URL("/retailer", req.url) 
@@ -32,7 +31,7 @@ export default clerkMiddleware(async (auth, req) => {
     return new Response(null, { status: 307, headers: { Location: redirectUrl.toString() } });
   }
 
-  // Redirect users WITHOUT role to onboarding (except if already on onboarding)
+  // Redirect users WITHOUT role to onboarding
   if (!userRole && !req.nextUrl.pathname.startsWith("/onboarding")) {
     const onboardingUrl = new URL("/onboarding", req.url);
     return new Response(null, { status: 307, headers: { Location: onboardingUrl.toString() } });
@@ -45,8 +44,5 @@ export default clerkMiddleware(async (auth, req) => {
 });
 
 export const config = {
-  matcher: [
-    // Skip Next.js internals and static files
-    "/((?!_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
