@@ -13,6 +13,7 @@ export default defineSchema({
   users: defineTable({
     // Clerk authentication reference
     tokenIdentifier: v.string(),
+    clerkId: v.optional(v.string()),
     
     // User role: wholesaler or retailer
     role: v.optional(v.union(v.literal("wholesaler"), v.literal("retailer"))),
@@ -22,8 +23,13 @@ export default defineSchema({
     
     // Onboarding status - tracks who has finished setup
     onboarded: v.boolean(),
+    
+    // Timestamps
+    createdAt: v.optional(v.number()),
+    updatedAt: v.optional(v.number()),
   })
-    .index("by_tokenIdentifier", ["tokenIdentifier"]),
+    .index("by_tokenIdentifier", ["tokenIdentifier"])
+    .index("by_clerkId", ["clerkId"]),
 
   // ============================================
   // PRODUCTS - With location-based pricing
