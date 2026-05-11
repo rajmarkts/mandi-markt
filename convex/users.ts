@@ -50,7 +50,7 @@ export const syncClerkUser = mutation({
         district: args.district,
         shopName: args.shopName,
         phone: args.phone,
-        name: args.name,
+        name: args.name || "User",
         email: args.email,
         updatedAt: now,
       });
@@ -63,7 +63,7 @@ export const syncClerkUser = mutation({
       district: args.district,
       shopName: args.shopName,
       phone: args.phone,
-      name: args.name,
+      name: args.name || "User",
       email: args.email,
       createdAt: now,
       updatedAt: now,
