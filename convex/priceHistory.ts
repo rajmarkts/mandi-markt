@@ -179,9 +179,8 @@ export const getDailyReport = query({
     // Get existing trend data if available
     const trend = await ctx.db
       .query("marketTrends")
-      .withIndex("by_district_category_date", (q) => 
-        q.eq("district", args.district).eq("date", args.date)
-      )
+      .withIndex("by_district", (q) => q.eq("district", args.district))
+      .filter((q) => q.eq(q.field("date"), args.date))
       .first();
     
     if (trend) {
