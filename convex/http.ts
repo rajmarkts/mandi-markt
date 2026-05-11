@@ -4,6 +4,7 @@
  */
 
 import { httpRouter } from "convex/server";
+import { httpAction } from "./_generated/server";
 
 const http = httpRouter();
 
@@ -14,7 +15,7 @@ const http = httpRouter();
 http.route({
   path: "/clerk-webhook",
   method: "POST",
-  handler: async (ctx, request) => {
+  handler: httpAction(async (ctx, request) => {
     let payload: { type?: string; data?: any } = {};
     
     // Safely parse request body
@@ -107,7 +108,7 @@ http.route({
       headers: { "Content-Type": "application/json" },
     });
   }
-},
+}),
 });
 
 // Export the router as default
