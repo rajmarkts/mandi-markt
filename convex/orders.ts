@@ -268,14 +268,17 @@ export const getKhataOrders = query({
   handler: async (ctx, args) => {
     let query;
     
-    if (args.retailerId) {
+    const retailerId = args.retailerId;
+    const wholesalerId = args.wholesalerId;
+    
+    if (retailerId) {
       query = ctx.db
         .query("orders")
-        .withIndex("by_retailerId", (q) => q.eq("retailerId", args.retailerId));
-    } else if (args.wholesalerId) {
+        .withIndex("by_retailerId", (q) => q.eq("retailerId", retailerId));
+    } else if (wholesalerId) {
       query = ctx.db
         .query("orders")
-        .withIndex("by_wholesalerId", (q) => q.eq("wholesalerId", args.wholesalerId));
+        .withIndex("by_wholesalerId", (q) => q.eq("wholesalerId", wholesalerId));
     } else {
       return [];
     }

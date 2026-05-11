@@ -58,6 +58,7 @@ export const syncClerkUser = mutation({
     }
     
     const userId = await ctx.db.insert("users", {
+      tokenIdentifier: `https://clerk.com|${args.clerkId}`,
       clerkId: args.clerkId,
       role: args.role,
       district: args.district,
@@ -65,6 +66,7 @@ export const syncClerkUser = mutation({
       phone: args.phone,
       name: args.name || "User",
       email: args.email,
+      onboarded: true,
       createdAt: now,
       updatedAt: now,
     });
